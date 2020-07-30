@@ -1,0 +1,9 @@
+How to download the data files
+
+	1) git init
+	2) git remote add origin https://github.com/CSSEGISandData/COVID-19
+	3) git config core.sparseCheckout true # enable this
+	4) echo "csse_covid_19_data/csse_covid_19_daily_reports_us" > .git/info/sparse-checkout
+	5) git pull origin master
+
+This will still download the whole repo, but condenses the files that aren't sparsed.
