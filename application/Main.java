@@ -13,6 +13,7 @@
 
 package application;
 
+import java.io.File;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -28,27 +29,50 @@ public class Main extends Application {
 	private static final String APP_TITLE = "US Covid-19 Trends";
 	protected static Stage window; // easier to call the stage window
 	protected static Scene mainScene, dataScene, exportScene;
+	protected DataStructure data;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		window = primaryStage;
 
 		// creating the mainScene from MainScene.java
-		mainScene = MainScene.buildMainScene(BorderPaneTemplate.buildTemplate());
+		mainScene = MainScene
+				.buildMainScene(BorderPaneTemplate.buildTemplate());
+
+		// fill data structure with the values from application/data
+		int numOfDays; // number of days there is data for
+		String dirPath; // the path of the directory storing the data
+		File dataDir; // the directory folder of the data
+		String[] fileList; // string array containing the name of each file in
+							// the directory
+
+		dirPath = "application/data/csse_covid_19_data/csse_covid_19_daily_reports_us";
+		dataDir = new File(dirPath);
+		fileList = dataDir.list();
+		numOfDays = fileList.length - 1; // minus 1 for the readme file
+
+		data = new DataStructure(numOfDays);
+
+		// loop through the dataDir until the data structure is filled
+		for (int i = 0; i < numOfDays; i++) {
+			String tempFilePath = dirPath + "/" + fileList[i];
+			FileReader tempReader = new FileReader(new File(tempFilePath));
+			data.setDataArr(i, tempReader.getDataArrayFromFile());
+		}
 
 		// creating the dataScene from DataScene.java
-		dataScene = DataScene.buildDataScene(BorderPaneTemplate.buildTemplate());
+		dataScene = DataScene.buildDataScene(BorderPaneTemplate.buildTemplate(),
+				data);
 
 		// creating the exportScene from ExportScene.java
-		exportScene = ExportScene.buildExportScene(BorderPaneTemplate.buildTemplate());
+		exportScene = ExportScene
+				.buildExportScene(BorderPaneTemplate.buildTemplate(), data);
 
 		// add necessities and set the new window to mainScene (Home)
 		window.setTitle(APP_TITLE);
 		window.setScene(mainScene);
 		window.show();
-		
-		// clone repo for data
-		
+
 	}
 
 	/**

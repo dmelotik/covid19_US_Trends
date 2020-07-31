@@ -42,7 +42,7 @@ public class DataScene {
 	 * 
 	 * @return the dataScene Scene
 	 */
-	public static Scene buildDataScene(BorderPane root) {
+	public static Scene buildDataScene(BorderPane root, DataStructure data) {
 		// adding onto template that was built in BorderPaneTemplate.java
 
 		// creating comboBox used to select state
@@ -60,7 +60,7 @@ public class DataScene {
 
 		// creating the date filters start
 		Label startDate = new Label("Choose Start Date: ");
-		DatePicker startCalander = new DatePicker(LocalDate.of(2020, 4, 12));
+		DatePicker startCalendar = new DatePicker(LocalDate.of(2020, 4, 12));
 
 		// block off dates before and after TODO cite this
 		final Callback<DatePicker, DateCell> dayCellFactoryStart = new Callback<DatePicker, DateCell>() {
@@ -71,8 +71,9 @@ public class DataScene {
 					public void updateItem(LocalDate item, boolean empty) {
 						super.updateItem(item, empty);
 
-						if (item.isBefore(startCalander.getValue())
-								|| item.isAfter(LocalDate.now().plusDays(-1))) {
+						if (item.isBefore(LocalDate.of(2020, 4, 12))
+								|| item.isAfter(LocalDate.of(2020, 4, 12)
+										.plusDays(data.getNumOfDays() - 2))) {
 							setDisable(true);
 							setStyle("-fx-background-color: #ffc0cb;");
 						}
@@ -81,14 +82,14 @@ public class DataScene {
 				};
 			}
 		};
-		startCalander.setDayCellFactory(dayCellFactoryStart);
+		startCalendar.setDayCellFactory(dayCellFactoryStart);
 
-		VBox startVBox = new VBox(startDate, startCalander);
+		VBox startVBox = new VBox(startDate, startCalendar);
 		startVBox.setPadding(new Insets(5));
 
 		// creating the date filter end
 		Label endDate = new Label("Choose End Date: ");
-		DatePicker endCalander = new DatePicker(LocalDate.now());
+		DatePicker endCalendar = new DatePicker(LocalDate.now());
 
 		// TODO cite this
 		// (https://docs.oracle.com/javase/8/javafx/user-interface-tutorial/date-picker.htm#CCHEBIFF)
@@ -101,7 +102,8 @@ public class DataScene {
 					public void updateItem(LocalDate item, boolean empty) {
 						super.updateItem(item, empty);
 
-						if (item.isAfter(LocalDate.now())
+						if (item.isAfter(LocalDate.of(2020, 4, 12)
+								.plusDays(data.getNumOfDays() - 1))
 								|| item.isBefore(LocalDate.of(2020, 4, 13))) {
 							setDisable(true);
 							setStyle("-fx-background-color: #ffc0cb;");
@@ -111,25 +113,49 @@ public class DataScene {
 				};
 			}
 		};
-		endCalander.setDayCellFactory(dayCellFactoryEnd);
+		endCalendar.setDayCellFactory(dayCellFactoryEnd);
 
-		VBox endVBox = new VBox(endDate, endCalander);
+		VBox endVBox = new VBox(endDate, endCalendar);
 		endVBox.setPadding(new Insets(5));
 
 		// combobox to select the data to show on the graph
 		Label dataLabel = new Label("Select Data to Show: ");
 		ComboBox<String> dataSelector = new ComboBox<String>();
-		dataSelector.getItems().addAll("Confirmed Cases", "Confirmed Deaths",
-				"Percent of Positive Tests", "Rate of Infection");
+		dataSelector.getItems().addAll("New Daily Cases",
+				"Daily Confirmed Deaths", "Daily Tests Administered");
 		dataSelector.getSelectionModel().selectFirst();
 		VBox dataVBox = new VBox(dataLabel, dataSelector);
 		dataVBox.setPadding(new Insets(5));
 
 		// adding a button to submit the data and generate the graph
 		Button submit = new Button("Generate New Graph");
-		Alert a = new Alert(AlertType.INFORMATION);
-		a.setContentText("TODO: Set this button to create a new graph!");
-		submit.setOnAction(e -> a.show());
+		Alert a = new Alert(AlertType.ERROR);
+		a.setContentText(
+				"Please make sure the end date comes after the start date.");
+		submit.setOnAction(e -> {
+			if (endCalendar.getValue().isBefore(startCalendar.getValue())) {
+				// error calander dates are incorrect
+				a.show();
+			} else if (endCalendar.getValue().isAfter(LocalDate.of(2020, 4, 12)
+					.plusDays(data.getNumOfDays() - 1))) {
+				// chose date outside possiblities
+				Alert a1 = new Alert(AlertType.ERROR);
+				a1.setContentText(
+						"Please update your data or choose a date outside of the red");
+				a1.show();
+			} else if ((stateMenu.getValue().equals("Diamond Princess")
+					|| stateMenu.getValue().equals("Grand Princess"))
+					&& dataSelector.getValue()
+							.equals("Daily Tests Administered")) {
+				// error no test info for cruise ships
+				Alert a2 = new Alert(AlertType.ERROR);
+				a2.setContentText(
+						"No test data for Grand Princess or Diamond Princess");
+				a2.show();
+			} else {
+				// TODO call the correct data calculation and update graph
+			}
+		});
 		VBox submitVBox = new VBox(submit);
 		submitVBox.setPadding(new Insets(5));
 

@@ -7,7 +7,7 @@ package application;
 public enum States { // TODO does this need to be public?
 	ALABAMA("Alabama"),
 	ALASKA("Alaska"),
-	AMERICAN_SOMOA("American Somoa"),
+	AMERICAN_SOMOA("American Samoa"),
 	ARIZONA("Arizona"),
 	ARKANSAS("Arkansas"),
 	CALIFORNIA("California"),
@@ -44,7 +44,7 @@ public enum States { // TODO does this need to be public?
 	NEW_YORK("New York"),
 	NORTH_CAROLINA("North Carolina"),
 	NORTH_DAKOTA("North Dakota"),
-	NORTHERN_MARINA_ISLANDS("Northern Marina Islands"),
+	NORTHERN_MARINA_ISLANDS("Northern Mariana Islands"),
 	OHIO("Ohio"),
 	OKLAHOMA("Oklahoma"),
 	OREGON("Oregon"),

@@ -40,18 +40,20 @@ public class ExportScene {
 	 * 
 	 * @return the exportScene Scene
 	 */
-	public static Scene buildExportScene(BorderPane root) {
+	public static Scene buildExportScene(BorderPane root, DataStructure data) {
 		// adding onto the template built in BorderPaneTemplate.java
 
 		// creating the VBox for the radio buttons
 		Label dataLabel = new Label("Select Data to Export:");
 		RadioButton deathButton = new RadioButton("Total Deaths");
 		RadioButton caseButton = new RadioButton("Total Confirmed Cases");
+		RadioButton testsGivenButton = new RadioButton(
+				"Total Tests Administered");
 		RadioButton percentOfTestsButton = new RadioButton(
 				"Percent of Positive Tests");
 		RadioButton rateButton = new RadioButton("Rate of Infection");
-		VBox radioVBox = new VBox(deathButton, caseButton, percentOfTestsButton,
-				rateButton);
+		VBox radioVBox = new VBox(deathButton, caseButton, testsGivenButton,
+				percentOfTestsButton, rateButton);
 		radioVBox.setPadding(new Insets(10));
 		VBox dataVBox = new VBox(dataLabel, radioVBox);
 		dataVBox.setPadding(new Insets(5));
@@ -72,7 +74,7 @@ public class ExportScene {
 		Alert a = new Alert(AlertType.INFORMATION);
 		a.setContentText(
 				"TODO: Set this button to create export.txt and show finished message");
-		createButton.setOnAction(e -> a.show()); //TODO
+		createButton.setOnAction(e -> a.show()); // TODO
 		VBox buttonVBox = new VBox(createButton);
 		buttonVBox.setPadding(new Insets(5));
 
@@ -81,9 +83,9 @@ public class ExportScene {
 		leftPanel.setPadding(new Insets(35));
 		leftPanel.setSpacing(7);
 		leftPanel.setAlignment(Pos.CENTER);
-		
+
 		root.setLeft(leftPanel);
-		
+
 		// set center panel to display of the export.txt file
 		// TODO replace with example.txt
 		Label exampleLabel = new Label("Example export.txt:");
@@ -101,7 +103,7 @@ public class ExportScene {
 		VBox centerVBox = new VBox(exampleLabel, replace);
 		centerVBox.setSpacing(5);
 		centerVBox.setAlignment(Pos.CENTER);
-		
+
 		root.setCenter(centerVBox);
 
 		return new Scene(root, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
