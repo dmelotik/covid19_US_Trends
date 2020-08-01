@@ -14,6 +14,8 @@
 package application;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -89,7 +91,7 @@ public class DataScene {
 
 		// creating the date filter end
 		Label endDate = new Label("Choose End Date: ");
-		DatePicker endCalendar = new DatePicker(LocalDate.now());
+		DatePicker endCalendar = new DatePicker(LocalDate.now().minusDays(1));
 
 		// TODO cite this
 		// (https://docs.oracle.com/javase/8/javafx/user-interface-tutorial/date-picker.htm#CCHEBIFF)
@@ -127,6 +129,16 @@ public class DataScene {
 		VBox dataVBox = new VBox(dataLabel, dataSelector);
 		dataVBox.setPadding(new Insets(5));
 
+		// creating the line chart for the center panel
+		NumberAxis xAxis = new NumberAxis();
+		xAxis.setLabel("Day(s) since ...");
+		NumberAxis yAxis = new NumberAxis();
+		yAxis.setLabel("People");
+		AreaChart<Number, Number> ac = new AreaChart<Number, Number>(xAxis,
+				yAxis);
+		ac.setTitle("Example Graph"); // TODO change based on data selected
+		root.setCenter(ac);
+
 		// adding a button to submit the data and generate the graph
 		Button submit = new Button("Generate New Graph");
 		Alert a = new Alert(AlertType.ERROR);
@@ -152,8 +164,37 @@ public class DataScene {
 				a2.setContentText(
 						"No test data for Grand Princess or Diamond Princess");
 				a2.show();
-			} else {
-				// TODO call the correct data calculation and update graph
+			} else { // no errors, then call DataCalculations.java and update
+						// the graph
+				DataCalculations calculations = new DataCalculations(data);
+
+				ArrayList<Integer> dataPoints = calculations
+						.dataSceneCalculations(dataSelector.getValue(),
+								stateMenu.getValue(), startCalendar.getValue(),
+								endCalendar.getValue());
+
+				// set labels correctly
+				ac.setTitle(dataSelector.getValue() + " for "
+						+ stateMenu.getValue());
+				int year = startCalendar.getValue().getYear();
+				String month = startCalendar.getValue().getMonth().toString();
+				// make month lowercase
+				month = month.charAt(0) + month.substring(1).toLowerCase();
+				int day = startCalendar.getValue().getDayOfMonth();
+				xAxis.setLabel(
+						"Day(s) since " + month + " " + day + ", " + year);
+
+				// set the data correctly
+				XYChart.Series<Number, Number> lineChart = new XYChart.Series<Number, Number>();
+
+				for (int d = 0; d < dataPoints.size(); d++) {
+					lineChart.getData().add(
+							new Data<Number, Number>(d, dataPoints.get(d)));
+				}
+
+				lineChart.getData().add(new Data<Number, Number>(10, 89));
+
+				ac.getData().add(lineChart);
 			}
 		});
 		VBox submitVBox = new VBox(submit);
@@ -165,37 +206,6 @@ public class DataScene {
 		leftPanel.setAlignment(Pos.TOP_LEFT);
 		leftPanel.setPadding(new Insets(35));
 		root.setLeft(leftPanel);
-
-		// creating the line chart for the center panel
-		// TODO changes based on selections
-		NumberAxis xAxis = new NumberAxis();
-		xAxis.setLabel("Day");
-		NumberAxis yAxis = new NumberAxis();
-		yAxis.setLabel("People");
-		AreaChart<Number, Number> ac = new AreaChart<Number, Number>(xAxis,
-				yAxis);
-		ac.setTitle("Covid-19 Trends"); // TODO change based on data selected
-
-		// TODO remove hard coded data - potentially code in data on mouse hover
-		XYChart.Series<Number, Number> confirmedCases = new XYChart.Series<Number, Number>();
-		confirmedCases.setName("Confirmed Cases"); // TODO changes on data
-													// selected
-		// hard coding data
-		confirmedCases.getData().add(new Data<Number, Number>(0, 17));
-		confirmedCases.getData().add(new Data<Number, Number>(1, 23));
-		confirmedCases.getData().add(new Data<Number, Number>(2, 40));
-		confirmedCases.getData().add(new Data<Number, Number>(3, 35));
-		confirmedCases.getData().add(new Data<Number, Number>(4, 67));
-		confirmedCases.getData().add(new Data<Number, Number>(5, 80));
-		confirmedCases.getData().add(new Data<Number, Number>(6, 76));
-		confirmedCases.getData().add(new Data<Number, Number>(7, 81));
-		confirmedCases.getData().add(new Data<Number, Number>(8, 54));
-		confirmedCases.getData().add(new Data<Number, Number>(9, 98));
-		confirmedCases.getData().add(new Data<Number, Number>(10, 89));
-
-		ac.getData().add(confirmedCases);
-
-		root.setCenter(ac);
 
 		return new Scene(root, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
 	}
