@@ -4,7 +4,7 @@ package application;
  * List of every state in the US, including the territories. The whole US is
  * first variable.
  */
-public enum States { // TODO does this need to be public?
+public enum States {
 	ALABAMA("Alabama"),
 	ALASKA("Alaska"),
 	AMERICAN_SOMOA("American Samoa"),

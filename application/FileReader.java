@@ -1,3 +1,16 @@
+/**
+ * This JavaFX11 application shows Covid-19 
+ * trends in the US. The data comes from Johns 
+ * Hopkins University and is updated daily. The 
+ * user can filter the data and export it into 
+ * a *.txt file in an easy to digest format.
+ * 
+ * @project covid19_US_Trends (Covid-19 Data Trends)
+ * @author Dylan Melotik
+ * @email dmelotik@wisc.edu
+ * @lecture CS400 002
+ */
+
 package application;
 
 import java.io.File;
@@ -8,15 +21,27 @@ import java.util.Scanner;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
+/**
+ * This class reads a *.csv data file and returns a DataNode[] array of a whole
+ * file that is meant to be one of the inner arrays of the DataStructure array
+ */
 public class FileReader {
 
 	private File dataFile; // the file being read from
-	private LocalDate date;
-	private final int CONFIRMED_INDEX = 5;
-	private final int DEATHS_INDEX = 6;
-	private final int TESTS_INDEX = 11;
-	private final int STATE_INDEX = 0;
+	private LocalDate date; // the date the *.csv file was create
+	private final int CONFIRMED_INDEX = 5; // index the confirmed case number is
+											// foundin after splitting up a line
+	private final int DEATHS_INDEX = 6; // the index of the death count
+	private final int TESTS_INDEX = 11; // index of the total tests administered
+	private final int STATE_INDEX = 0; // index of the state name
 
+	/**
+	 * Constructor method that instantiates with a file and pulls out the date
+	 * to make it a new LocalDate
+	 * 
+	 * @param file -a *.csv file containing the covid-19 data points for a given
+	 *             day
+	 */
 	public FileReader(File file) {
 		dataFile = file;
 
@@ -34,6 +59,14 @@ public class FileReader {
 		date = LocalDate.of(year, month, day);
 	}
 
+	/**
+	 * Only method in the class that reads the data from a *.csv file and stores
+	 * it in a DataNode array that will be placed in the DataStructure's 2d
+	 * array
+	 * 
+	 * @return an array containing data nodes of each state for a given day,
+	 *         (date)
+	 */
 	public DataNode[] getDataArrayFromFile() {
 		DataNode[] nodeArr = new DataNode[States.values().length];
 
