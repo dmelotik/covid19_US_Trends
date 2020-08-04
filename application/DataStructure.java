@@ -15,6 +15,9 @@ package application;
 
 import java.time.LocalDate;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 /**
  * This class is the data structure that stores and holds all of the information
  * from the *.csv data files from the cloned GitHub COVID-19 repo.
@@ -93,6 +96,43 @@ public class DataStructure implements DataStructureADT {
 	@Override
 	public int getNumOfDays() {
 		return days;
+	}
+
+	/**
+	 * This method returns the last date accounted for in this data structure.
+	 * This date will always be the last element in the 1st layer of the 2d
+	 * array.
+	 * 
+	 * @return LocalDate of the last day in the 2d array
+	 */
+	@Override
+	public LocalDate getLastDate() {
+		if (days <= 0) {
+			Alert a = new Alert(AlertType.ERROR);
+			a.setContentText(
+					"Please load data into the program. Follow instructions.txt");
+			a.show();
+		}
+
+		return dataArr[days - 1][0].getDate();
+	}
+
+	/**
+	 * This method returns the first date in the data structure.
+	 * 
+	 * @return LocalDate of the first date, or pop up an error message if the
+	 *         dataArr is empty
+	 */
+	@Override
+	public LocalDate getFirstDate() {
+		if (days <= 0) {
+			Alert a = new Alert(AlertType.ERROR);
+			a.setContentText(
+					"Please load data into the program. Follow instructions.txt");
+			a.show();
+		}
+
+		return dataArr[0][0].getDate();
 	}
 
 }

@@ -118,42 +118,57 @@ public class DataCalculations {
 	}
 
 	/**
-	 * This method calcuates the total number change for that day in america
+	 * This method calculates the total change in this operation for the entire
+	 * United states on the given date
 	 * 
-	 * @param operation
-	 * @param indexOfDate
-	 * @return
+	 * @param operation   -the data point being collected. i.e. Deaths, Cases,
+	 *                    Tests
+	 * @param indexOfDate -the outer index of the date to calculate the daily
+	 *                    operation total
+	 * @return the new operation data value for the given date
 	 */
 	private int calculateUSTotals(String operation, int indexOfDate) {
 		int dataPoint = 0; // the general data bit being returned
 
 		if (operation.contains("Cases")) { // get all cases of whole us
 
-			// initial data point
-			dataPoint += data.getDataArr()[indexOfDate][0].getNumOfConfirmed();
 			for (int i = 1; i < data.getDataArr()[indexOfDate].length; i++) {
-				dataPoint += (data.getDataArr()[indexOfDate][i]
-						.getNumOfConfirmed()
-						- data.getDataArr()[indexOfDate][i - 1]
-								.getNumOfConfirmed());
+				// calculate the num of cases for i States on this and prev date
+				int thisDayCases = data.getDataArr()[indexOfDate][i]
+						.getNumOfConfirmed();
+				int prevDayCases = data.getDataArr()[indexOfDate - 1][i]
+						.getNumOfConfirmed();
+
+				dataPoint += (thisDayCases - prevDayCases); // add difference to
+															// the running total
 			}
+
 		} else if (operation.contains("Deaths")) { // get all us deaths
 
-			// initial data point
-			dataPoint += data.getDataArr()[indexOfDate][0].getNumOfDeaths();
 			for (int i = 1; i < data.getDataArr()[indexOfDate].length; i++) {
-				dataPoint += (data.getDataArr()[indexOfDate][i].getNumOfDeaths()
-						- data.getDataArr()[indexOfDate][i - 1]
-								.getNumOfDeaths());
+				// calculate the num of deaths for i States on this & prev date
+				int thisDayDeaths = data.getDataArr()[indexOfDate][i]
+						.getNumOfDeaths();
+				int prevDayDeaths = data.getDataArr()[indexOfDate - 1][i]
+						.getNumOfDeaths();
+
+				dataPoint += (thisDayDeaths - prevDayDeaths); // add to running
+																// total
 			}
+
 		} else { // get all tests administered
 
-			// initial data point
-			dataPoint += data.getDataArr()[indexOfDate][0].getNumOfTest();
 			for (int i = 1; i < data.getDataArr()[indexOfDate].length; i++) {
-				dataPoint += (data.getDataArr()[indexOfDate][i].getNumOfTest()
-						- data.getDataArr()[indexOfDate][i - 1].getNumOfTest());
+				// calculate the num of tests for i States on this and prev date
+				int thisDayTests = data.getDataArr()[indexOfDate][i]
+						.getNumOfTest();
+				int prevDayTests = data.getDataArr()[indexOfDate - 1][i]
+						.getNumOfTest();
+
+				dataPoint += (thisDayTests - prevDayTests); // add difference to
+															// the running total
 			}
+
 		}
 
 		return dataPoint;

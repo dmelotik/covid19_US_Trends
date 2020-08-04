@@ -62,4 +62,22 @@ public interface DataStructureADT {
 	 * @return the number of days represented in the data structure
 	 */
 	public int getNumOfDays();
+
+	/**
+	 * This method returns the last date accounted for in this data structure.
+	 * This date will always be the last element in the 1st layer of the 2d
+	 * array.
+	 * 
+	 * @return LocalDate of the last day in the 2d array, or pop up an error
+	 *         message if the dataArr is empty
+	 */
+	public LocalDate getLastDate();
+
+	/**
+	 * This method returns the first date in the data structure.
+	 * 
+	 * @return LocalDate of the first date, or pop up an error message if the
+	 *         dataArr is empty
+	 */
+	public LocalDate getFirstDate();
 }

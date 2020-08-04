@@ -13,8 +13,10 @@
 
 package application;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -30,6 +32,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -60,9 +63,13 @@ public class DataScene {
 		VBox stateVBox = new VBox(stateLabel, stateMenu);
 		stateVBox.setPadding(new Insets(5));
 
+		// finding the first and last days in data arr
+		LocalDate firstDay = data.getFirstDate();
+		LocalDate lastDay = data.getLastDate();
+
 		// creating the date filters start
 		Label startDate = new Label("Choose Start Date: ");
-		DatePicker startCalendar = new DatePicker(LocalDate.of(2020, 4, 12));
+		DatePicker startCalendar = new DatePicker(firstDay.plusDays(2));
 
 		// block off dates before and after TODO cite this
 		final Callback<DatePicker, DateCell> dayCellFactoryStart = new Callback<DatePicker, DateCell>() {
@@ -73,9 +80,8 @@ public class DataScene {
 					public void updateItem(LocalDate item, boolean empty) {
 						super.updateItem(item, empty);
 
-						if (item.isBefore(LocalDate.of(2020, 4, 12))
-								|| item.isAfter(LocalDate.of(2020, 4, 12)
-										.plusDays(data.getNumOfDays() - 2))) {
+						if (item.isBefore(firstDay.plusDays(2))
+								|| item.isAfter(lastDay.minusDays(1))) {
 							setDisable(true);
 							setStyle("-fx-background-color: #ffc0cb;");
 						}
@@ -91,7 +97,7 @@ public class DataScene {
 
 		// creating the date filter end
 		Label endDate = new Label("Choose End Date: ");
-		DatePicker endCalendar = new DatePicker(LocalDate.now().minusDays(1));
+		DatePicker endCalendar = new DatePicker(lastDay);
 
 		// TODO cite this
 		// (https://docs.oracle.com/javase/8/javafx/user-interface-tutorial/date-picker.htm#CCHEBIFF)
@@ -104,9 +110,8 @@ public class DataScene {
 					public void updateItem(LocalDate item, boolean empty) {
 						super.updateItem(item, empty);
 
-						if (item.isAfter(LocalDate.of(2020, 4, 12)
-								.plusDays(data.getNumOfDays() - 1))
-								|| item.isBefore(LocalDate.of(2020, 4, 13))) {
+						if (item.isAfter(lastDay)
+								|| item.isBefore(firstDay.plusDays(3))) {
 							setDisable(true);
 							setStyle("-fx-background-color: #ffc0cb;");
 						}
@@ -129,15 +134,16 @@ public class DataScene {
 		VBox dataVBox = new VBox(dataLabel, dataSelector);
 		dataVBox.setPadding(new Insets(5));
 
-		// creating the line chart for the center panel
+		// creating the example area chart for the center panel
 		NumberAxis xAxis = new NumberAxis();
 		xAxis.setLabel("Day(s) since ...");
 		NumberAxis yAxis = new NumberAxis();
 		yAxis.setLabel("People");
-		AreaChart<Number, Number> ac = new AreaChart<Number, Number>(xAxis,
-				yAxis);
-		ac.setTitle("Example Graph"); // TODO change based on data selected
-		root.setCenter(ac);
+		AreaChart<Number, Number> acExample = new AreaChart<Number, Number>(
+				xAxis, yAxis);
+		acExample.setTitle("Example Graph"); // TODO change based on data
+												// selected
+		root.setCenter(acExample);
 
 		// adding a button to submit the data and generate the graph
 		Button submit = new Button("Generate New Graph");
@@ -173,9 +179,7 @@ public class DataScene {
 								stateMenu.getValue(), startCalendar.getValue(),
 								endCalendar.getValue());
 
-				// set labels correctly
-				ac.setTitle(dataSelector.getValue() + " for "
-						+ stateMenu.getValue());
+				// collect data to correctly label the graph
 				int year = startCalendar.getValue().getYear();
 				String month = startCalendar.getValue().getMonth().toString();
 				// make month lowercase
@@ -183,18 +187,49 @@ public class DataScene {
 				int day = startCalendar.getValue().getDayOfMonth();
 				xAxis.setLabel(
 						"Day(s) since " + month + " " + day + ", " + year);
+				yAxis.setLabel(dataSelector.getValue());
 
-				// set the data correctly
-				XYChart.Series<Number, Number> lineChart = new XYChart.Series<Number, Number>();
+				// create a new graph for the center panel with correct labels
+				AreaChart<Number, Number> ac = new AreaChart<Number, Number>(
+						xAxis, yAxis);
+				ac.setTitle(dataSelector.getValue() + " for "
+						+ stateMenu.getValue());
+
+				// add data to the chart
+				XYChart.Series<Number, Number> dataSet = new XYChart.Series<Number, Number>();
 
 				for (int d = 0; d < dataPoints.size(); d++) {
-					lineChart.getData().add(
-							new Data<Number, Number>(d, dataPoints.get(d)));
+					int dataBit;
+					// datapoint validater
+					if (dataPoints.get(d) < 0) {
+						dataBit = 0;
+					} else {
+						dataBit = dataPoints.get(d);
+					}
+
+					dataSet.getData().add(new XYChart.Data<>((d + 1), dataBit));
+				}
+				ac.getData().add(dataSet);
+
+				// adding tooltip to hover over the graph to show the numbers
+				int dayCounter = 0;
+				for (Data<Number, Number> dataNode : dataSet.getData()) {
+					LocalDate date = startCalendar.getValue()
+							.plusDays(dayCounter);
+					int yr = date.getYear();
+					String mo = date.getMonth().toString();
+					mo = mo.charAt(0) + mo.substring(1).toLowerCase();
+					int dayOfMonth = date.getDayOfMonth();
+
+					Tooltip tooltip = new Tooltip("Daily Change: "
+							+ NumberFormat.getNumberInstance(Locale.US)
+									.format(dataNode.getYValue())
+							+ "\n" + mo + " " + dayOfMonth + ", " + yr);
+					Tooltip.install(dataNode.getNode(), tooltip);
+					dayCounter++;
 				}
 
-				lineChart.getData().add(new Data<Number, Number>(10, 89));
-
-				ac.getData().add(lineChart);
+				root.setCenter(ac);
 			}
 		});
 		VBox submitVBox = new VBox(submit);
