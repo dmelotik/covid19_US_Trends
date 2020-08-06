@@ -179,57 +179,75 @@ public class DataScene {
 								stateMenu.getValue(), startCalendar.getValue(),
 								endCalendar.getValue());
 
-				// collect data to correctly label the graph
-				int year = startCalendar.getValue().getYear();
-				String month = startCalendar.getValue().getMonth().toString();
-				// make month lowercase
-				month = month.charAt(0) + month.substring(1).toLowerCase();
-				int day = startCalendar.getValue().getDayOfMonth();
-				xAxis.setLabel(
-						"Day(s) since " + month + " " + day + ", " + year);
-				yAxis.setLabel(dataSelector.getValue());
+				if (dataPoints != null) {
 
-				// create a new graph for the center panel with correct labels
-				AreaChart<Number, Number> ac = new AreaChart<Number, Number>(
-						xAxis, yAxis);
-				ac.setTitle(dataSelector.getValue() + " for "
-						+ stateMenu.getValue());
+					// collect data to correctly label the graph
+					int year = startCalendar.getValue().getYear();
+					String month = startCalendar.getValue().getMonth()
+							.toString();
+					// make month lowercase
+					month = month.charAt(0) + month.substring(1).toLowerCase();
+					int day = startCalendar.getValue().getDayOfMonth();
+					xAxis.setLabel(
+							"Day(s) since " + month + " " + day + ", " + year);
+					yAxis.setLabel(dataSelector.getValue());
 
-				// add data to the chart
-				XYChart.Series<Number, Number> dataSet = new XYChart.Series<Number, Number>();
+					// create a new graph for the center panel with correct
+					// labels
+					AreaChart<Number, Number> ac = new AreaChart<Number, Number>(
+							xAxis, yAxis);
+					ac.setTitle(dataSelector.getValue() + " for "
+							+ stateMenu.getValue());
 
-				for (int d = 0; d < dataPoints.size(); d++) {
-					int dataBit;
-					// datapoint validater
-					if (dataPoints.get(d) < 0) {
-						dataBit = 0;
-					} else {
-						dataBit = dataPoints.get(d);
+					// add data to the chart
+					XYChart.Series<Number, Number> dataSet = new XYChart.Series<Number, Number>();
+
+					int incorrectDataCounter = 0; // keeps track of wonky data
+													// in files
+					for (int d = 0; d < dataPoints.size(); d++) {
+						int dataBit;
+						// datapoint validater
+						if (dataPoints.get(d) < 0) {
+							dataBit = 0;
+							incorrectDataCounter++;
+						} else {
+							dataBit = dataPoints.get(d);
+						}
+
+						dataSet.getData()
+								.add(new XYChart.Data<>((d + 1), dataBit));
+					}
+					ac.getData().add(dataSet);
+
+					// tell user how many incorrect data points there were
+					if (incorrectDataCounter > 0) {
+						Alert a1 = new Alert(AlertType.INFORMATION);
+						a1.setContentText("There is " + incorrectDataCounter
+								+ " data errors. Daily change of 0 for errors.");
+						a1.show();
 					}
 
-					dataSet.getData().add(new XYChart.Data<>((d + 1), dataBit));
+					// adding tooltip to hover over the graph to show the
+					// numbers
+					int dayCounter = 0;
+					for (Data<Number, Number> dataNode : dataSet.getData()) {
+						LocalDate date = startCalendar.getValue()
+								.plusDays(dayCounter);
+						int yr = date.getYear();
+						String mo = date.getMonth().toString();
+						mo = mo.charAt(0) + mo.substring(1).toLowerCase();
+						int dayOfMonth = date.getDayOfMonth();
+
+						Tooltip tooltip = new Tooltip("Daily Change: "
+								+ NumberFormat.getNumberInstance(Locale.US)
+										.format(dataNode.getYValue())
+								+ "\n" + mo + " " + dayOfMonth + ", " + yr);
+						Tooltip.install(dataNode.getNode(), tooltip);
+						dayCounter++;
+					}
+
+					root.setCenter(ac);
 				}
-				ac.getData().add(dataSet);
-
-				// adding tooltip to hover over the graph to show the numbers
-				int dayCounter = 0;
-				for (Data<Number, Number> dataNode : dataSet.getData()) {
-					LocalDate date = startCalendar.getValue()
-							.plusDays(dayCounter);
-					int yr = date.getYear();
-					String mo = date.getMonth().toString();
-					mo = mo.charAt(0) + mo.substring(1).toLowerCase();
-					int dayOfMonth = date.getDayOfMonth();
-
-					Tooltip tooltip = new Tooltip("Daily Change: "
-							+ NumberFormat.getNumberInstance(Locale.US)
-									.format(dataNode.getYValue())
-							+ "\n" + mo + " " + dayOfMonth + ", " + yr);
-					Tooltip.install(dataNode.getNode(), tooltip);
-					dayCounter++;
-				}
-
-				root.setCenter(ac);
 			}
 		});
 		VBox submitVBox = new VBox(submit);

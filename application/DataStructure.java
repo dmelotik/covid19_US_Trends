@@ -45,7 +45,7 @@ public class DataStructure implements DataStructureADT {
 	 * @param date  -The LocalDate of the chunk of information being looked for
 	 * @param state -The state to find the data from
 	 * 
-	 * @return the cooresponding DataNode
+	 * @return the corresponding DataNode
 	 */
 	@Override
 	public DataNode get(LocalDate date, States state)
@@ -114,7 +114,21 @@ public class DataStructure implements DataStructureADT {
 			a.show();
 		}
 
-		return dataArr[days - 1][0].getDate();
+		// find the last date
+		int index = days - 1;
+		while (dataArr[index][0] == null
+				|| dataArr[index][0].getDate() == null) {
+			if (index > 0) {
+				index--;
+			} else {
+				Alert a = new Alert(AlertType.ERROR);
+				a.setContentText(
+						"Files are incorrectly named. Please use the same name as the GitHub repo");
+				a.show();
+			}
+		}
+
+		return dataArr[index][0].getDate();
 	}
 
 	/**
@@ -132,7 +146,22 @@ public class DataStructure implements DataStructureADT {
 			a.show();
 		}
 
-		return dataArr[0][0].getDate();
+		// find the first date in the data structure
+		int index = 0;
+
+		while (dataArr[index][0] == null
+				|| dataArr[index][0].getDate() == null) {
+			if (index < days) {
+				index++;
+			} else {
+				Alert a = new Alert(AlertType.ERROR);
+				a.setContentText(
+						"The files are incorrectly named, please use the same name as the GitHub repo.");
+				a.show();
+			}
+		}
+
+		return dataArr[index][0].getDate();
 	}
 
 }

@@ -16,6 +16,8 @@ package application;
 import java.io.File;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 /**
@@ -48,16 +50,27 @@ public class Main extends Application {
 
 		dirPath = "application/data/csse_covid_19_data/csse_covid_19_daily_reports_us";
 		dataDir = new File(dirPath);
-		fileList = dataDir.list();
-		numOfDays = fileList.length - 1; // minus 1 for the readme file
+		if (dataDir.isDirectory()) {
+			fileList = dataDir.list();
+			numOfDays = fileList.length - 1; // minus 1 for the readme file
 
-		data = new DataStructure(numOfDays);
+			data = new DataStructure(numOfDays);
 
-		// loop through the dataDir until the data structure is filled
-		for (int i = 0; i < numOfDays; i++) {
-			String tempFilePath = dirPath + "/" + fileList[i];
-			FileReader tempReader = new FileReader(new File(tempFilePath));
-			data.setDataArr(i, tempReader.getDataArrayFromFile());
+			// loop through the dataDir until the data structure is filled
+			for (int i = 0; i < numOfDays; i++) {
+				String tempFilePath = dirPath + "/" + fileList[i];
+				FileReader tempReader = new FileReader(new File(tempFilePath));
+				DataNode[] tempArr = tempReader.getDataArrayFromFile();
+				if (tempArr == null) { // if the files are formatted incorrectly
+					break; // skip iteration
+				}
+				data.setDataArr(i, tempArr);
+			}
+		} else {
+			Alert a = new Alert(AlertType.ERROR);
+			a.setContentText(
+					"The COVID-19 data is not in the correct spot. Please follow README.txt.");
+			a.show();
 		}
 
 		// creating the dataScene from DataScene.java

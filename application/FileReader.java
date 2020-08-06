@@ -51,9 +51,37 @@ public class FileReader {
 														// with a space
 		fileName = fileName.trim();
 		Scanner nameScnr = new Scanner(fileName);
-		int month = nameScnr.nextInt();
-		int day = nameScnr.nextInt();
-		int year = nameScnr.nextInt();
+
+		int month = 0;
+		int day = 0;
+		int year = 0;
+
+		// create error to throw if the file names are incorrect
+		Alert nameError = new Alert(AlertType.ERROR);
+		nameError.setContentText("The File, \"" + dataFile.getName()
+				+ "\", is incorrect. Do not change file names.");
+		// checking to make sure the file names are correct
+		if (nameScnr.hasNextInt()) {
+			month = nameScnr.nextInt();
+		} else {
+			nameError.show();
+			return;
+		}
+
+		if (nameScnr.hasNextInt()) {
+			day = nameScnr.nextInt();
+		} else {
+			nameError.show();
+			return;
+		}
+
+		if (nameScnr.hasNextInt()) {
+			year = nameScnr.nextInt();
+		} else {
+			nameError.show();
+			return;
+		}
+
 		nameScnr.close();
 
 		date = LocalDate.of(year, month, day);
@@ -86,8 +114,27 @@ public class FileReader {
 
 		// now read line by line, inputting the values into the nodeArr
 		for (int i = 0; i < States.values().length; i++) {
-			String line = fileReader.nextLine(); // returns a whole line
+			String line = "";
+			if (fileReader.hasNextLine()) {
+				line = fileReader.nextLine(); // returns a whole line
+			} else {
+				Alert a = new Alert(AlertType.ERROR);
+				a.setContentText(
+						dataFile.getName() + " is not formatted correctly");
+				a.show();
+				return null; // end because data will be incorrect
+			}
+
 			String[] dataPoints = line.split(",");
+
+			// checking if the line lengths are correct
+			if (dataPoints.length < 16 || dataPoints.length > 18) {
+				Alert a = new Alert(AlertType.ERROR);
+				a.setContentText(
+						dataFile.getName() + " is not formatted correctly");
+				a.show();
+				continue; // skip loop iteration
+			}
 
 			// convert strings to ints and find state
 			States stateName = null;

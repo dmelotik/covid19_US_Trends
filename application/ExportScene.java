@@ -21,6 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -49,11 +50,12 @@ public class ExportScene {
 		RadioButton caseButton = new RadioButton("Total Confirmed Cases");
 		RadioButton testsGivenButton = new RadioButton(
 				"Total Tests Administered");
+		RadioButton mortalityButton = new RadioButton("Mortality Rate");
 		RadioButton percentOfTestsButton = new RadioButton(
 				"Percent of Positive Tests");
 		RadioButton rateButton = new RadioButton("Rate of Infection");
 		VBox radioVBox = new VBox(deathButton, caseButton, testsGivenButton,
-				percentOfTestsButton, rateButton);
+				mortalityButton, percentOfTestsButton, rateButton);
 		radioVBox.setPadding(new Insets(10));
 		VBox dataVBox = new VBox(dataLabel, radioVBox);
 		dataVBox.setPadding(new Insets(5));
@@ -69,17 +71,48 @@ public class ExportScene {
 		VBox stateVBox = new VBox(stateLabel, stateMenu);
 		stateVBox.setPadding(new Insets(5));
 
+		// creating text box for file name
+		TextField fileName = new TextField();
+		fileName.setPromptText("Enter file name");
+		fileName.setPrefColumnCount(8);
+		VBox nameVBox = new VBox(fileName);
+		nameVBox.setPadding(new Insets(5));
+
 		// add create button
-		Button createButton = new Button("Create export.txt");
-		Alert a = new Alert(AlertType.INFORMATION);
-		a.setContentText(
-				"TODO: Set this button to create export.txt and show finished message");
-		createButton.setOnAction(e -> a.show()); // TODO
+		Button createButton = new Button("Create export file");
+		createButton.setOnAction(e -> {
+			// error process first
+			DataCalculations calculator = new DataCalculations(data);
+			String name = fileName.getText().trim();
+			String state = stateMenu.getValue();
+			if (!calculator.isFileNameValid(name)) { // used invalid chars
+				// do nothing, errors handled in
+				// DataCalculations.isFileNameValid()
+			} else { // make calculations and write the file TODO
+
+				if (deathButton.isSelected()) { // calculate deaths
+
+				}
+				if (caseButton.isSelected()) { // calculate cases
+
+				}
+				if (testsGivenButton.isSelected()) { // calculate tests
+
+				}
+				if (percentOfTestsButton.isSelected()) {
+					// calculate percent of tests returned positive
+				}
+				if (rateButton.isSelected()) {
+					// calculate the rate of infection
+				}
+
+			}
+		});
 		VBox buttonVBox = new VBox(createButton);
 		buttonVBox.setPadding(new Insets(5));
 
 		// adding selectors to the left panel
-		VBox leftPanel = new VBox(dataVBox, stateVBox, buttonVBox);
+		VBox leftPanel = new VBox(dataVBox, stateVBox, nameVBox, buttonVBox);
 		leftPanel.setPadding(new Insets(35));
 		leftPanel.setSpacing(7);
 		leftPanel.setAlignment(Pos.CENTER);

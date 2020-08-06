@@ -13,8 +13,12 @@
 
 package application;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 /**
  * This class makes the data calculations for the program
@@ -63,6 +67,15 @@ public class DataCalculations {
 		int indexOfStart = -1;
 		int indexOfEnd = -1;
 		for (int i = 0; i < data.getDataArr().length; i++) {
+			// error handling for incorrect format
+			if (data.getDataArr()[i][0] == null) {
+				Alert a = new Alert(AlertType.ERROR);
+				a.setContentText(
+						"Please fix the formatting issue and restart the program");
+				a.show();
+				return null;
+			}
+
 			if (data.getDataArr()[i][0].getDate().equals(startDate)) {
 				indexOfStart = i;
 			}
@@ -172,5 +185,72 @@ public class DataCalculations {
 		}
 
 		return dataPoint;
+	}
+
+	/**
+	 * This method checks if the file name the user entered meets the criteria
+	 * of a legitimate file name. The method is only called from
+	 * ExportScene.java
+	 * 
+	 * @param name -the file name that the user enters
+	 * @return false when name contains invalid chars or the file already
+	 *         exists, otherwise true
+	 */
+	public boolean isFileNameValid(String name) {
+		// first check for invalid characters
+		String[] invalidChars = new String[] { "<", ">", ":", "\"", "/", "\\",
+				"|", "?", "*", " ", ".txt", "." };
+		for (String invalidChar : invalidChars) {
+			if (name.contains(invalidChar)) {
+				Alert a = new Alert(AlertType.ERROR);
+				a.setContentText("File name contained invalid character(s): \""
+						+ invalidChar + "\"");
+				a.show();
+				return false;
+			}
+		}
+
+		// check if the file already exists
+		String pathname = "exports/" + name + ".txt";
+		File tempFile = new File(pathname);
+		if (tempFile.exists()) {
+			Alert a = new Alert(AlertType.ERROR);
+			a.setContentText("A file with that name already exists");
+			a.show();
+			return false;
+		}
+
+		return true;
+	}
+
+	public int calculateTotalDeaths(String state) {
+
+		return -1; // TODO
+	}
+
+	public int calculateTotalConfirmedCases(String state) {
+
+		return -1; // TODO
+	}
+
+	public int calculateTestsAdministered(String state) {
+
+		return -1; // TODO
+	}
+
+	public int calculateMortalityRate(String state) {
+
+		return -1; // TODO
+	}
+	
+	
+	public int calculatePercentOfPositiveTests(String state) {
+
+		return -1; // TODO
+	}
+
+	public int calculateRateOfInfection() {
+
+		return -1; // TODO
 	}
 }

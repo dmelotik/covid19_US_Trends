@@ -16,3 +16,16 @@ Apologies, but I created my project with a source folder. So my executable.jar
 is located in src/.
 
 Thanks :)
+
+1) Add more input validation
+	Check if the repo is in the correct folder
+	Check array length of each line in the files
+2) Add the output functionality
+	Create a textbox for the user to choose where the output file goes
+3) Add Tests for the data and calculations
+4) Add application.css for styling
+5) Optional: Add feature to update the repo through a button in the program
+6) Optional: ??
+
+Bugs:
+1) Not every invalid input is accounted for, but as long as the repo is cloned and not changed it is fine
