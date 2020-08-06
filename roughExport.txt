@@ -1,0 +1,26 @@
+Project: 	Covid-19 US Trends
+Date Created: 	*DATE*
+Data since: 	April 12, 2020
+
+
+Statistical Calculations of *State* Covid-19 Data:
+
+	Total number of deaths: 		*num*
+	Total number of confirmed cases: 	*num*
+	Total number of tests administered:	*num*
+	Mortality Rate:				*num*%
+	Percent of positive tests:		*num*%
+	Rate of infection per population:	*num*%
+		*State* Population:		*num*
+
+	
+Notes:
+
+This information is compiled from multiple publicly available 
+sources, and the data is not always 100% accurate. To have the 
+most up to date information please follow the repository update 
+instructions in README.txt.
+
+Data Source: 	github.com/CSSEGISandData/COVID-19
+Program Author: Dylan Melotik
+email:		dmelotik@wisc.edu

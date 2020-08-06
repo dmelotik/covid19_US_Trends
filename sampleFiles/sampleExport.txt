@@ -1,0 +1,26 @@
+Project: 	Covid-19 US Trends
+Date Created: 	August 1, 2020
+Data since: 	April 12, 2020
+
+
+Statistical Calculations of Wisconsin Covid-19 Data:
+
+	Total number of deaths: 		980
+	Total number of confirmed cases: 	61,000
+	Total number of tests administered:	989,000
+	Mortality Rate:				1.61%
+	Percent of positive tests:		6.17%
+	Rate of infection per population:	1.11%
+		*State* Population:		5,500,000
+
+	
+Notes:
+
+This information is compiled from multiple publicly available 
+sources, and the data is not always 100% accurate. To have the 
+most up to date information please follow the repository update 
+instructions in README.txt.
+
+Data Source: 	github.com/CSSEGISandData/COVID-19
+Program Author: Dylan Melotik
+email:		dmelotik@wisc.edu
