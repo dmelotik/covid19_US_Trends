@@ -92,9 +92,20 @@ public class ExportScene {
 			DataCalculations calculator = new DataCalculations(data);
 			String name = fileName.getText().trim();
 			String state = stateMenu.getValue();
-			if (!calculator.isFileNameValid(name)) { // used invalid chars
+			if (!deathButton.isSelected() && !caseButton.isSelected()
+					&& !testsGivenButton.isSelected()
+					&& !mortalityButton.isSelected()
+					&& !percentOfTestsButton.isSelected()
+					&& !rateButton.isSelected()) {
+				Alert a = new Alert(AlertType.ERROR);
+				a.setContentText(
+						"Please select at least one data point to show");
+				a.show();
+			} else if (!calculator.isFileNameValid(name)) { // used invalid
+															// chars
 				// do nothing, errors handled in
 				// DataCalculations.isFileNameValid()
+
 			} else { // make calculations and write the file
 
 				try {
