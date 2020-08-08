@@ -14,8 +14,10 @@
 package application;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -223,34 +225,203 @@ public class DataCalculations {
 		return true;
 	}
 
+	/**
+	 * This method calculates the total number of deaths for state in States
+	 * enum.
+	 * 
+	 * @param state -the string value of a state in enum, or the "United States"
+	 * @return the total number of deaths as an int
+	 */
 	public int calculateTotalDeaths(String state) {
+		// find the index of the state in States.java
+		int stateIndex = -1;
+		for (int i = 0; i < States.values().length; i++) {
+			if (States.values()[i].toString().equals(state)) {
+				stateIndex = i;
+				break;
+			}
+		}
 
-		return -1; // TODO
+		// Calculating the total number of covid deaths for the given state
+		int totalDeaths = 0;
+
+		if (stateIndex == -1) {
+			// calculate united states totals
+			for (DataNode node : data.getDataArr()[data.getNumOfDays() - 1]) {
+				totalDeaths += node.getNumOfDeaths();
+			}
+		} else { // calculate for given state index
+			totalDeaths = data.getDataArr()[data.getNumOfDays() - 1][stateIndex]
+					.getNumOfDeaths();
+		}
+
+		return totalDeaths;
 	}
 
+	/**
+	 * This method returns the total number of confirmed covid-19 cases for the
+	 * given state
+	 * 
+	 * @param state -the string value of a state in States enum or the "United
+	 *              States" as a whole
+	 * @return the total number of cases for state
+	 */
 	public int calculateTotalConfirmedCases(String state) {
+		// find the index of the state in States.java
+		int stateIndex = -1;
+		for (int i = 0; i < States.values().length; i++) {
+			if (States.values()[i].toString().equals(state)) {
+				stateIndex = i;
+				break;
+			}
+		}
 
-		return -1; // TODO
+		// calculate total confirmed cases
+		int totalConfirmedCases = 0;
+
+		if (stateIndex == -1) {
+			// calculate united states totals
+			for (DataNode node : data.getDataArr()[data.getNumOfDays() - 1]) {
+				totalConfirmedCases += node.getNumOfConfirmed();
+			}
+		} else { // calculate for given state index
+			totalConfirmedCases = data.getDataArr()[data.getNumOfDays()
+					- 1][stateIndex].getNumOfConfirmed();
+		}
+
+		return totalConfirmedCases;
 	}
 
+	/**
+	 * This method returns the total number of tests administered in the given
+	 * state
+	 * 
+	 * @param state -the string representation of a state from States enum or
+	 *              the "United States" as a whole
+	 * @return the total number of tests administered in state
+	 */
 	public int calculateTestsAdministered(String state) {
+		// find the index of the state in States.java
+		int stateIndex = -1;
+		for (int i = 0; i < States.values().length; i++) {
+			if (States.values()[i].toString().equals(state)) {
+				stateIndex = i;
+				break;
+			}
+		}
 
-		return -1; // TODO
+		// calculate total tests Administered
+		int totalTests = 0;
+
+		if (stateIndex == -1) {
+			// calculate united states totals
+			for (DataNode node : data.getDataArr()[data.getNumOfDays() - 1]) {
+				totalTests += node.getNumOfTest();
+			}
+		} else { // calculate for given state index
+			totalTests = data.getDataArr()[data.getNumOfDays() - 1][stateIndex]
+					.getNumOfTest();
+		}
+
+		return totalTests;
 	}
 
-	public int calculateMortalityRate(String state) {
-
-		return -1; // TODO
+	/**
+	 * This method calculates the mortality rate for covid-19 in the given
+	 * state. The mortality rate is the percentage of deaths caused by covid-19
+	 * to the number of confirmed cases.
+	 * 
+	 * @param state -the strinf representation of a value in States enum, or the
+	 *              "United States" as a whole
+	 * @return the mortality rate of state as a percentage
+	 */
+	public double calculateMortalityRate(String state) {
+		return ((double) calculateTotalDeaths(state)
+				/ (double) calculateTotalConfirmedCases(state)) * 100;
 	}
-	
-	
-	public int calculatePercentOfPositiveTests(String state) {
 
-		return -1; // TODO
+	/**
+	 * This method calculates the percentage of positive tests in the given
+	 * state. This percentage is based off of the number of tests administered.
+	 * 
+	 * @param state -the string representation of the state value found in
+	 *              States enum, or the "United States" as a whole
+	 * @return the percentage of positive tests as a double
+	 */
+	public double calculatePercentOfPositiveTests(String state) {
+		return ((double) calculateTotalConfirmedCases(state)
+				/ (double) calculateTestsAdministered(state)) * 100;
 	}
 
-	public int calculateRateOfInfection() {
+	/**
+	 * This private method checks to see if the state is a state listed in
+	 * States enum, otherwise it is the "United States"
+	 * 
+	 * @param state -the string representation of the state in States enum, or
+	 *              the "United States"
+	 * @return true if state is "United States" and not in States.java,
+	 *         otherwise false
+	 */
+	private boolean isStateUnitedStates(String state) {
+		for (States stateInEnum : States.values()) {
+			if (state.equals(stateInEnum.toString())) {
+				return false; // found a state :. not the US
+			}
+		}
+		return true; // no state found :. US
+	}
 
-		return -1; // TODO
+	/**
+	 * This method calculates the states population based off of the data file
+	 * application/populations/population.txt
+	 * 
+	 * @param state -the string representation of the States enum, or the entire
+	 *              "United States"
+	 * @return the population of state as an int
+	 */
+	public int calculateStatePopulation(String state) {
+		File populationData = new File(
+				"application/population/populations.txt");
+		boolean isStateUS = isStateUnitedStates(state);
+		int statePopulation = 0;
+		try {
+			Scanner fileScnr = new Scanner(populationData);
+			fileScnr.nextLine(); // skip first line because it is the label
+
+			while (fileScnr.hasNextLine()) {
+				String[] line = fileScnr.nextLine().split(",");
+				if (isStateUS) { // whole us is being calculated
+					statePopulation += Integer.parseInt(line[1]);
+				} else { // search for a state
+					if (state.equals(line[0])) {
+						statePopulation = Integer.parseInt(line[1]);
+					}
+				}
+			}
+
+			fileScnr.close();
+		} catch (FileNotFoundException e) {
+			Alert a = new Alert(AlertType.ERROR);
+			a.setContentText(
+					"population/populations.txt does not exist. Please make sure that file is in the directory.");
+			a.show();
+			return -1; // bad, error occured
+		}
+
+		return statePopulation;
+	}
+
+	/**
+	 * This method calculates the rate of infection in the given state. The rate
+	 * of infection is a fraction between the number of people with covid-19 and
+	 * the number of people in that state.
+	 * 
+	 * @param state -the string representation of the state value in States
+	 *              enum, or the "United States" as a whole
+	 * @return the rate of infection as a percentage
+	 */
+	public double calculateRateOfInfection(String state) {
+		return ((double) calculateTotalConfirmedCases(state)
+				/ (double) calculateStatePopulation(state)) * 100;
 	}
 }

@@ -13,6 +13,13 @@
 
 package application;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.util.Locale;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -88,22 +95,108 @@ public class ExportScene {
 			if (!calculator.isFileNameValid(name)) { // used invalid chars
 				// do nothing, errors handled in
 				// DataCalculations.isFileNameValid()
-			} else { // make calculations and write the file TODO
+			} else { // make calculations and write the file
 
-				if (deathButton.isSelected()) { // calculate deaths
+				try {
+					File export = new File("exports/" + name + ".txt");
+					if (!export.createNewFile()) {
+						Alert a = new Alert(AlertType.ERROR);
+						a.setContentText(
+								"File already exists, use a different name");
+						a.show();
+					}
 
-				}
-				if (caseButton.isSelected()) { // calculate cases
+					// create file writer for export
+					FileWriter exportWriter = new FileWriter(export);
 
-				}
-				if (testsGivenButton.isSelected()) { // calculate tests
+					// add header to file
+					exportWriter.write("Projet:\t\tCovid-19 US Trends\n");
+					exportWriter.write("Date Created:\t"
+							+ LocalDate.now().toString() + "\n");
+					exportWriter.write("Data Since:\t"
+							+ data.getFirstDate().toString() + "\n\n\n");
+					exportWriter.write("Statistical Calculations of " + state
+							+ " Covid-19 Data:\n\n");
 
-				}
-				if (percentOfTestsButton.isSelected()) {
-					// calculate percent of tests returned positive
-				}
-				if (rateButton.isSelected()) {
-					// calculate the rate of infection
+					// write stats based on radio button selections
+					if (deathButton.isSelected()) { // calculate deaths
+						String deaths = NumberFormat
+								.getNumberInstance(Locale.US)
+								.format(calculator.calculateTotalDeaths(state));
+						exportWriter.write("\tTotal number of deaths:\t\t\t"
+								+ deaths + "\n");
+					}
+					if (caseButton.isSelected()) { // calculate cases
+						String cases = NumberFormat.getNumberInstance(Locale.US)
+								.format(calculator
+										.calculateTotalConfirmedCases(state));
+						exportWriter
+								.write("\tTotal number of confirmed cases:\t"
+										+ cases + "\n");
+					}
+					if (testsGivenButton.isSelected()) { // calculate tests
+						String tests = NumberFormat.getNumberInstance(Locale.US)
+								.format(calculator
+										.calculateTestsAdministered(state));
+						exportWriter
+								.write("\tTotal number of tests administered:\t"
+										+ tests + "\n");
+					}
+					if (mortalityButton.isSelected()) {
+						// calculate mortality rate
+						String mortalityRate = String.format("%.2f",
+								calculator.calculateMortalityRate(state));
+						exportWriter.write("\tMortality rate:\t\t\t\t"
+								+ mortalityRate + "%\n");
+
+					}
+					if (percentOfTestsButton.isSelected()) {
+						// calculate percent of tests returned positive
+						String percentOfTests = String.format("%.2f", calculator
+								.calculatePercentOfPositiveTests(state));
+						exportWriter.write("\tPercent of positive tests:\t\t"
+								+ percentOfTests + "%\n");
+					}
+					if (rateButton.isSelected()) {
+						// calculate the rate of infection
+						String rateOfInfection = String.format("%.2f",
+								calculator.calculateRateOfInfection(state));
+						String population = NumberFormat
+								.getNumberInstance(Locale.US).format(calculator
+										.calculateStatePopulation(state));
+						exportWriter
+								.write("\tRate of infection per population:\t"
+										+ rateOfInfection + "%\n");
+						exportWriter.write("\t\t" + stateMenu.getValue()
+								+ " Population:\t" + population + "\n");
+					}
+
+					// add the returning comments line by line
+					exportWriter.write("\n\n");
+					exportWriter.write("Notes:\n\n");
+					exportWriter.write(
+							"This information is compiled from multiple publicly available\n");
+					exportWriter.write(
+							"sources, and the data is not always 100% accurate. To have the\n");
+					exportWriter.write(
+							"most up to date information please follow the repository update\n");
+					exportWriter.write("instructions in README.txt.\n\n");
+					exportWriter.write(
+							"Data Source:\t\tgithub.com/CSSEGISandData/COVID-19\n");
+					exportWriter.write(
+							"Population Data Source:\thttps://www.census.gov/data/tables\n");
+					exportWriter.write("Program Author:\t\tDylan Melotik\n");
+					exportWriter.write("email:\t\t\tdmelotik@wisc.edu\n");
+
+					exportWriter.close();
+					Alert a = new Alert(AlertType.CONFIRMATION);
+					a.setContentText(name + ".txt was successfully created!");
+					a.show();
+				} catch (IOException e1) {
+					Alert a = new Alert(AlertType.ERROR);
+					a.setContentText(
+							"Error " + e1.getMessage() + " exception thrown");
+					a.show();
 				}
 
 			}
@@ -120,16 +213,17 @@ public class ExportScene {
 		root.setLeft(leftPanel);
 
 		// set center panel to display of the export.txt file
-		// TODO replace with example.txt
 		Label exampleLabel = new Label("Example export.txt:");
-		String text = "This section in the center panel of "
-				+ "the BorderPanel will show a preview of "
-				+ "what the export.txt file will look like. "
-				+ "I would like to make have it update based "
-				+ "on the users selections, but if I cannot "
-				+ "figure that out it will show an example.";
+		String text = "Statistical Calculations of *State* Covid-19 Data:\r\n\n"
+				+ "	Total number of deaths:				*num*\n"
+				+ "	Total number of confirmed cases: 		*num*\n"
+				+ "	Total number of tests administered:	*num*\n"
+				+ "	Mortality Rate:						*num*%\n"
+				+ "	Percent of positive tests:				*num*%\n"
+				+ "	Rate of infection per population:		*num*%\n"
+				+ "		*State* Population:				*num*";
 		Text replace = new Text(text);
-		replace.setWrappingWidth(250);
+		replace.setWrappingWidth(350);
 		replace.setTextAlignment(TextAlignment.JUSTIFY);
 		replace.setLineSpacing(3.0);
 		replace.setFont(Font.font("sans-serif", FontPosture.REGULAR, 14));
