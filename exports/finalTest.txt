@@ -3,15 +3,15 @@ Date Created:	2020-08-08
 Data Since:	2020-04-12
 
 
-Statistical Calculations of Wisconsin Covid-19 Data:
+Statistical Calculations of American Samoa Covid-19 Data:
 
-	Total number of deaths:			961
-	Total number of confirmed cases:	56,056
-	Total number of tests administered:	989,016
-	Mortality rate:				1.71%
-	Percent of positive tests:		5.67%
-	Rate of infection per population:	0.96%
-		Wisconsin Population:		5,822,434
+	Total number of deaths:			0
+	Total number of confirmed cases:	0
+	Total number of tests administered:	1,267
+	Mortality rate:				NaN%
+	Percent of positive tests:		0.00%
+	Rate of infection per population:	0.00%
+		American Samoa Population:	55,465
 
 
 Notes:
