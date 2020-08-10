@@ -67,7 +67,7 @@ public enum States {
 	private String name; // name that matches input files
 	
 	/**
-	 * Places string val of State in name
+	 * Places string value of State in name
 	 * 
 	 * @param name -the String value of the State (or Territory)
 	 */

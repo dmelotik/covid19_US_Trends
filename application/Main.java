@@ -26,8 +26,8 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-	protected static final int WINDOW_WIDTH = 768;
-	protected static final int WINDOW_HEIGHT = 432;
+	protected static final int WINDOW_WIDTH = 777;
+	protected static final int WINDOW_HEIGHT = 460;
 	private static final String APP_TITLE = "US Covid-19 Trends";
 	protected static Stage window; // easier to call the stage window
 	protected static Scene mainScene, dataScene, exportScene;
@@ -80,6 +80,11 @@ public class Main extends Application {
 		// creating the exportScene from ExportScene.java
 		exportScene = ExportScene
 				.buildExportScene(BorderPaneTemplate.buildTemplate(), data);
+
+		// adding the stylesheet to each scene
+		mainScene.getStylesheets().add("application/application.css");
+		exportScene.getStylesheets().add("application/application.css");
+		dataScene.getStylesheets().add("application/application.css");
 
 		// add necessities and set the new window to mainScene (Home)
 		window.setTitle(APP_TITLE);

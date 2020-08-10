@@ -208,6 +208,7 @@ public class DataScene {
 					// labels
 					AreaChart<Number, Number> ac = new AreaChart<Number, Number>(
 							xAxis, yAxis);
+					ac.setLegendVisible(false);
 					ac.setTitle(dataSelector.getValue() + " for "
 							+ stateMenu.getValue());
 

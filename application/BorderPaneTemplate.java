@@ -36,16 +36,21 @@ public class BorderPaneTemplate {
 		template.setPadding(new Insets(10));
 
 		// adding the navigation bar as an HBox
-		HBox topHBox = new HBox(10);
+		HBox topHBox = new HBox(35);
+		topHBox.getStyleClass().add("navbar");
+		topHBox.setPrefHeight(40);
 
 		// creating buttons for navigation between scenes
 		Button homePageButton = new Button("Home");
 		homePageButton.setOnAction(e -> Main.window.setScene(Main.mainScene));
+		homePageButton.getStyleClass().add("navbutton");
 		Button dataPageButton = new Button("US Data");
 		dataPageButton.setOnAction(e -> Main.window.setScene(Main.dataScene));
+		dataPageButton.getStyleClass().add("navbutton");
 		Button exportPageButton = new Button("Export Data");
 		exportPageButton
 				.setOnAction(e -> Main.window.setScene(Main.exportScene));
+		exportPageButton.getStyleClass().add("navbutton");
 
 		// adding buttons to hBox and formatting
 		topHBox.getChildren().addAll(homePageButton, dataPageButton,

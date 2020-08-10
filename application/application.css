@@ -1,0 +1,29 @@
+/* 
+	Project		: Covid19_US_Trends
+	Data		: August 10, 2020
+	Author		: Dylan Melotik
+	Email		: dmeloik@wisc.edu
+*/
+
+.root {
+	-fx-background-color: #c0c5ce;
+	-fx-font-family: "Helvetica";
+	-fx-font-size: 12.0px;
+}
+
+.button {
+	-fx-background-color: #a7adba;
+}
+
+.navbutton {
+	-fx-background-color: #606b75;
+	-fx-text-fill: white;
+}
+
+.navbar {
+	-fx-background-color: #4f5b66;
+}
+
+.label {
+	-fx-font-size: 13.0px;
+}
