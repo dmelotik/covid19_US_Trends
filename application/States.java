@@ -75,6 +75,12 @@ public enum States {
 		this.name = name;
 	}
 	
+	/**
+	 * This method overrides the toString() method to return
+	 * a proper cases sensitive representation of the States enum
+	 * 
+	 * @return a String representation of the State
+	 */
 	@Override
 	public String toString() {
 		return name;

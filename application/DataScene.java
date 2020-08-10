@@ -71,7 +71,15 @@ public class DataScene {
 		Label startDate = new Label("Choose Start Date: ");
 		DatePicker startCalendar = new DatePicker(firstDay.plusDays(2));
 
-		// block off dates before and after TODO cite this
+		/*
+		 * Author: Oracle
+		 * Date: August, 2014
+		 * Source: JavaFX UI Compenents
+		 * Type: Source code
+		 * URL: https://docs.oracle.com/javase/8/javafx/user-interface-tutorial/date-picker.htm#CCHEBIFF
+		 * 
+		 * Blocks off days that there is no data for
+		 */
 		final Callback<DatePicker, DateCell> dayCellFactoryStart = new Callback<DatePicker, DateCell>() {
 			@Override
 			public DateCell call(final DatePicker datePicker) {

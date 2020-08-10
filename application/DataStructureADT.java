@@ -21,14 +21,6 @@ import java.time.LocalDate;
 public interface DataStructureADT {
 
 	/**
-	 * Retrieves a node containing the information.
-	 * 
-	 * @return DataNode
-	 */
-	public DataNode get(LocalDate date, States state)
-			throws NullPointerException;
-
-	/**
 	 * Overloaded method that inserts a DataNode at a given position based on
 	 * the indices.
 	 * 

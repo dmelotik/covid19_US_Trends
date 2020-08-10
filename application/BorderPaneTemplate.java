@@ -28,17 +28,6 @@ import javafx.scene.layout.Priority;
  */
 public class BorderPaneTemplate {
 
-//	/**
-//	 * Constructor simply initializes an instance of the class.
-//	 */
-//	public BorderPaneTemplate() {}
-//
-//	/**
-//	 * This method builds the template BorderPane.
-//	 * 
-//	 * @return the template BorderPane
-//	 */
-	
 	public static BorderPane buildTemplate() {
 		// creating the new template for each scene
 		BorderPane template = new BorderPane();
@@ -55,7 +44,8 @@ public class BorderPaneTemplate {
 		Button dataPageButton = new Button("US Data");
 		dataPageButton.setOnAction(e -> Main.window.setScene(Main.dataScene));
 		Button exportPageButton = new Button("Export Data");
-		exportPageButton.setOnAction(e -> Main.window.setScene(Main.exportScene));
+		exportPageButton
+				.setOnAction(e -> Main.window.setScene(Main.exportScene));
 
 		// adding buttons to hBox and formatting
 		topHBox.getChildren().addAll(homePageButton, dataPageButton,

@@ -1,29 +1,50 @@
-README
-
-Course: cs400
-Semester: Summer 2020
-Project Name: Covid-19 US Trends
 Student Name: Dylan Melotik
 
 email: dmelotik@wisc.edu
 
-Notes for the grader:
+Note(s): Make sure you clone the data repo in order to use the application.
 
-Right now the GUI layout is finished. There is no real functionality.
-I will add css later once I finish adding the functionality. I expect
-to move change the layout slightly in that time.
-Apologies, but I created my project with a source folder. So my executable.jar
-is located in src/.
+What I learned:
+1) Creating a GUI through JavaFX 11
+2) Connecting a GUI to data/funcitons
+3) Importance of planning modular coding to allow for easier testing
+4) How to store and access large amounts of data (i.e. through data files)
 
-Thanks :)
 
-1) Add Tests for the data and calculations
-2) Add application.css for styling
-3) Add instructions to clone the repo to your machine
-4) Add instructions to update the repo on your machine
-5) Get Rid of weird files in application
-6) Optional: Add feature to update the repo through a button in the program
-7) Optional: ??
+What I would do next:
+1) Add more styling
+2) Make the code more modular
+	2a) Add testing
+3) Add a button to update the /data repo from the GUI
+4) Add more validation and error handling
+
+
+How to run the application:
+1) Go into cmd
+2) Go to your_path/covid19_US_Trends
+3) jar -cfm executable.jar manifest.txt .
+4) java --module-path "\path\to\javafx-sdk-11\lib" --add-modules 
+	javafx.controls,javafx.fxml -jar executable.jar
+	2a) Make sure you change the path to your own
+
+
+How to put the data on your machine:
+1) Open Git cmd
+2) Go into your_path/covid19_US_Trends/application
+3) mkdir data
+4) cd data/
+5) git init
+6) git remote add origin https://github.com/CSSEGISandData/COVID-19
+7) git config core.sparseCheckout true # enable this
+8) echo "csse_covid_19_data/csse_covid_19_daily_reports_us" > .git/info/sparse-checkout
+9) git pull origin master
+
+
+How to update the data:
+1) Go into covid19_US_Trends/application/data
+2) git pull origin master
+
 
 Bugs:
-1) Not every invalid input is accounted for, but as long as the repo is cloned and not changed it is fine
+1) Not every input validation is accounted for
+	-To fix this the code needs to be more modular

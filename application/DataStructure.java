@@ -39,22 +39,6 @@ public class DataStructure implements DataStructureADT {
 	}
 
 	/**
-	 * This method returns the DataNode associated with the given state on that
-	 * date.
-	 * 
-	 * @param date  -The LocalDate of the chunk of information being looked for
-	 * @param state -The state to find the data from
-	 * 
-	 * @return the corresponding DataNode
-	 */
-	@Override
-	public DataNode get(LocalDate date, States state)
-			throws NullPointerException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
 	 * This method sets a new data node in the given position
 	 * 
 	 * @param outerIndex -the outer index of the 2d DataNode array
