@@ -53,8 +53,7 @@ public class DataScene {
 		// creating comboBox used to select state
 		Label stateLabel = new Label("Select a State: ");
 		ComboBox<String> stateMenu = new ComboBox<String>();
-		stateMenu.getItems().add("United States"); // TODO different action for
-													// the whole US
+		stateMenu.getItems().add("United States");
 		// add the whole States enum to the ComboBox
 		for (States state : States.values()) {
 			stateMenu.getItems().add(state.toString());
@@ -107,9 +106,15 @@ public class DataScene {
 		Label endDate = new Label("Choose End Date: ");
 		DatePicker endCalendar = new DatePicker(lastDay);
 
-		// TODO cite this
-		// (https://docs.oracle.com/javase/8/javafx/user-interface-tutorial/date-picker.htm#CCHEBIFF)
-		// block off dates before and after
+		/*
+		 * Author: Oracle
+		 * Date: August, 2014
+		 * Source: JavaFX UI Compenents
+		 * Type: Source code
+		 * URL: https://docs.oracle.com/javase/8/javafx/user-interface-tutorial/date-picker.htm#CCHEBIFF
+		 * 
+		 * Blocks off days that there is no data for
+		 */
 		final Callback<DatePicker, DateCell> dayCellFactoryEnd = new Callback<DatePicker, DateCell>() {
 			@Override
 			public DateCell call(final DatePicker datePicker) {
@@ -149,8 +154,7 @@ public class DataScene {
 		yAxis.setLabel("People");
 		AreaChart<Number, Number> acExample = new AreaChart<Number, Number>(
 				xAxis, yAxis);
-		acExample.setTitle("Example Graph"); // TODO change based on data
-												// selected
+		acExample.setTitle("Example Graph");
 		root.setCenter(acExample);
 
 		// adding a button to submit the data and generate the graph
