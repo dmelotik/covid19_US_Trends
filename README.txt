@@ -7,7 +7,7 @@ What I learned:
 1) Creating a GUI through JavaFX 11
 2) Connecting a GUI to data/funcitons
 3) Importance of planning modular coding to allow for easier testing
-4) How to store and access large amounts of data (i.e. through data files)
+4) How to store and access large amounts of data (through *.csv and other text files)
 
 
 What I would do next:
