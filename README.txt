@@ -1,5 +1,4 @@
-Student Name: Dylan Melotik
-
+Author Name: Dylan Melotik
 email: dmelotik@wisc.edu
 
 Note(s): Make sure you clone the data repo in order to use the application.
@@ -48,3 +47,4 @@ How to update the data:
 Bugs:
 1) Not every input validation is accounted for
 	-To fix this the code needs to be more modular
+2) Will not work properly, unless the data repo is downloaded
