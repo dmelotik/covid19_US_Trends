@@ -156,9 +156,9 @@ public class FileReader {
 			int confirmed = Integer.parseInt(dataPoints[CONFIRMED_INDEX]);
 			int deaths = Integer.parseInt(dataPoints[DEATHS_INDEX]);
 			int tests = -1; // only diamond/grand princess
-			if (!dataPoints[TESTS_INDEX].equals("")) {
-				tests = Integer.parseInt(dataPoints[TESTS_INDEX]);
-			}
+			//if (!dataPoints[TESTS_INDEX].equals("")) {
+			//	tests = Integer.parseInt(dataPoints[TESTS_INDEX]);
+			//}
 
 			// create and insert node into data structure
 			nodeArr[i] = new DataNode(confirmed, deaths, tests, date,
