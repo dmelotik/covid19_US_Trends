@@ -19,7 +19,7 @@ What I would do next:
 
 
 How to run the application:
-1) Go into cmd
+1) Go into cmd / terminal
 2) Go to your_path/covid19_US_Trends
 3) jar -cfm executable.jar manifest.txt .
 4) java --module-path "\path\to\javafx-sdk-11\lib" --add-modules 
@@ -28,7 +28,7 @@ How to run the application:
 
 
 How to put the data on your machine:
-1) Open Git cmd
+1) Open Git's command line
 2) Go into your_path/covid19_US_Trends/application
 3) mkdir data
 4) cd data/
