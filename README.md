@@ -11,18 +11,6 @@ Make sure you clone the data repo in order to use the application.
 3. `jar -cfm executable.jar manifest.txt`
 4. `java --module-path "\path\to\javafx-sdk-11\lib" --add-modules javafx.controls,javafx.fxml -jar executable.jar`
 
-## What I learned:
-1. Creating a GUI through JavaFX 11
-2. Connecting a GUI to data/funcitons
-3. Importance of planning modular coding to allow for easier testing
-4. How to store and access large amounts of data (through *.csv and other text files)
-
-## What I would do next:
-1. Add more styling
-2. Make the code more modular and add testing
-3. Add a button to update the /data repo from the GUI
-4. Add more validation and error handling
-
 ## How to put the data on your machine:
 1. Open Git's command line
 2. Go into your_path/covid19_US_Trends/application
@@ -37,6 +25,18 @@ Make sure you clone the data repo in order to use the application.
 ## How to update the data:
 1. Go into covid19_US_Trends/application/data
 2. `git pull origin master`
+
+## What I learned:
+1. Creating a GUI through JavaFX 11
+2. Connecting a GUI to data/funcitons
+3. Importance of planning modular coding to allow for easier testing
+4. How to store and access large amounts of data (through *.csv and other text files)
+
+## What I would do next:
+1. Add more styling
+2. Make the code more modular and add testing
+3. Add a button to update the /data repo from the GUI
+4. Add more validation and error handling
 
 ## Bugs:
 1. Not every input validation is accounted for > To fix this the code needs to be more modular
